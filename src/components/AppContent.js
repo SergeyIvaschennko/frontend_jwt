@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { request } from '../axios_helper';
+import { request, setAuthHeader } from '../axios_helper';
 import WelcomeContent from "./WelcomeContent";
 import AuthContent from "./AuthContent";
 import LoginForm from "./LoginForm";
@@ -20,6 +20,7 @@ export default class AppContent extends React.Component {
 
     logout = () => {
         this.setState({componentToShow: "welcome"})
+        setAuthHeader(null);
     };
 
     onLogin = (e, username, password) => {
@@ -32,6 +33,7 @@ export default class AppContent extends React.Component {
                 password: password
             }).then(
             (response) => {
+                setAuthHeader(response.data.token);
                 this.setState({componentToShow: "messages"});
             }).catch(
             (error) => {
@@ -52,9 +54,11 @@ export default class AppContent extends React.Component {
                 password: password
             }).then(
             (response) => {
+                setAuthHeader(response.data.token);
                 this.setState({componentToShow: "messages"});
             }).catch(
             (error) => {
+                setAuthHeader(null);
                 this.setState({componentToShow: "welcome"})
             }
         );
